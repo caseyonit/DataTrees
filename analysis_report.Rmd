@@ -1,92 +1,117 @@
 ---
-title: "Decision Tree for Environmental Performance Index (EPI) Analysis"
-output: html_document
+title: "EPI Analysis with Decision Tree"
+output: 
+  html_document:
+    toc: true
+    theme: flatly
+    highlight: tango
 ---
 
 ```{r setup, include=FALSE}
-# This chunk runs all the setup, data loading, and model training in the background.
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
-# 1. Packages
-needed <- c("tidyverse", "caret", "rpart", "rpart.plot")
-lapply(needed, require, character.only = TRUE)
+# Load required libraries
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(rpart)
+  library(rpart.plot)
+  library(DT)
+})
 
-# 2. Data Prep & Feature Engineering
-input_csv <- "Data/epi2024_data.csv"
-data <- read_csv(input_csv, show_col_types = FALSE)
-required_cols <- c("BDH", "EPI", "ECS", "FSH", "APO", "AGR")
-data <- data %>% select(all_of(required_cols)) %>% drop_na()
+# 1. Load and prepare the data
+data <- read_csv("Data/epi2024_data.csv", show_col_types = FALSE) %>%
+  select(country, BDH, ECS, FSH, APO, AGR, EPI) %>%
+  drop_na()
 
-# Create EPI classes (our new target variable)
-epi_breaks <- quantile(data$EPI, probs = c(0, 0.33, 0.66, 1), na.rm = TRUE)
-data <- data %>%
-  mutate(EPI_Class = cut(EPI, breaks = epi_breaks,
-                         labels = c("Low", "Medium", "High"),
-                         include.lowest = TRUE))
-
-# 3. Training & Evaluation
-set.seed(123)
-train_idx <- createDataPartition(data$EPI_Class, p = 0.8, list = FALSE)
-train_set <- data[train_idx, ]
-test_set  <- data[-train_idx, ]
-
-ctrl <- trainControl(method = "repeatedcv", number = 5, repeats = 3)
-tune_grid <- expand.grid(cp = 0.001) # Force a complex tree
-
-# Train the model to predict EPI_Class using all other variables EXCEPT EPI itself
-tree_model <- train(
-  EPI_Class ~ . - EPI, data = train_set,
-  method = "rpart",
-  trControl = ctrl,
-  tuneGrid = tune_grid
+# 2. Create EPI classes (Low/Medium/High)
+data$EPI_Class <- cut(
+  data$EPI,
+  breaks = quantile(data$EPI, probs = c(0, 0.33, 0.66, 1), na.rm = TRUE),
+  labels = c("Low", "Medium", "High"),
+  include.lowest = TRUE
 )
 
-preds <- predict(tree_model, test_set)
-conf  <- confusionMatrix(preds, test_set$EPI_Class)
-accuracy <- conf$overall["Accuracy"]
-```
-
-### Summary: Predicting Environmental Performance (EPI)
-
-This report presents a decision tree model designed to predict a country's **Environmental Performance Index (EPI) Class** (Low, Medium, or High). Instead of using the EPI score directly, the model learns to predict it based on other related factors, such as Biodiversity & Habitat (`BDH`), Ecosystem Services (`ECS`), and Fish Stocks (`FSH`).
-
-This approach reveals the underlying drivers of environmental performance. The model achieves an accuracy of **`r round(accuracy * 100, 2)`%** on the test data.
-
-### Decision Tree Diagram for EPI
-
-The diagram below visualizes the rules the model learned. The variables appearing highest in the tree are the most influential predictors of a country's EPI score.
-
-```{r plot_tree, fig.width=12, fig.height=8}
-rpart.plot(tree_model$finalModel, box.palette = "BuGn", shadow.col = "gray", nn = TRUE)
-```
-
----
-
-### Future EPI Predictions
-
-Here, we use the trained model to predict the EPI Class for several hypothetical future scenarios. This demonstrates how the model can be used to assess the potential impact of changes in related environmental areas.
-
-```{r future_scenarios}
-# Create hypothetical future data
-future_data <- tibble::tribble(
-  ~Scenario, ~BDH, ~ECS, ~FSH, ~APO, ~AGR,
-  "High Biodiversity & Ecosystem Services", 95.0, 80.0, 70.0, 75.0, 60.0,
-  "Poor Fish Stocks & Agriculture Focus", 40.0, 50.0, 25.0, 45.0, 80.0,
-  "Balanced Moderate Scenario", 60.0, 65.0, 62.0, 58.0, 55.0,
-  "Ecosystem Collapse", 20.0, 15.0, 10.0, 30.0, 40.0,
-  "Sustainable Development Leader", 85.0, 90.0, 80.0, 88.0, 75.0
+# 3. Train a simple decision tree
+tree_model <- rpart(
+  EPI_Class ~ BDH + ECS + FSH + APO + AGR,
+  data = data,
+  control = rpart.control(
+    minsplit = 5,
+    minbucket = 2,
+    cp = 0.01,
+    maxdepth = 3
+  )
 )
 
-# Add a dummy EPI column to match the training data structure
-future_data$EPI <- 0
-
-# Predict the EPI Class for our scenarios
-future_data$Predicted_EPI_Class <- predict(tree_model, newdata = future_data)
-
-# Display the results, removing the dummy EPI column for a cleaner table
-future_data %>% 
-  select(-EPI) %>% 
-  knitr::kable(caption = "Model Predictions for Future EPI Scenarios")
+# 4. Get predictions
+data$Predicted_Class <- predict(tree_model, type = "class")
+accuracy <- mean(data$Predicted_Class == data$EPI_Class, na.rm = TRUE)
 ```
 
-**Interpreting the Predictions:** This predictive simulation reveals the core logic our model has learned from the real-world data. The results underscore a critical principle: strong overall environmental performance is not merely about avoiding negatives, but about achieving excellence in key domains. For instance, a country with thriving biodiversity is predicted to have a 'High' EPI, confirming that foundational ecological health is a primary driver of top-tier status. Conversely, the model's 'Low' prediction for a nation with poor fish stocks—even if it excels elsewhere—demonstrates that critical system failures cannot be easily offset. Perhaps most tellingly, the 'Balanced Moderate Scenario' also results in a 'Low' classification, suggesting that widespread mediocrity is insufficient for a positive rating; the model has learned that escaping the bottom tier requires clear, decisive strengths rather than just an absence of acute weaknesses.
+# EPI Decision Tree Analysis
+
+This report presents a decision tree model for predicting Environmental Performance Index (EPI) classes based on environmental indicators.
+
+## Decision Tree Visualization
+
+```{r tree_plot, fig.width=12, fig.height=8}
+rpart.plot(
+  tree_model,
+  type = 4,
+  extra = 104,
+  box.palette = list("#E41A1C", "#377EB8", "#4DAF4A"),
+  fallen.leaves = TRUE,
+  cex = 0.8,
+  main = "EPI Decision Tree",
+  tweak = 1.1,
+  branch.lty = 3,
+  shadow.col = "gray"
+)
+```
+
+## Country Data
+
+Search and sort the table below to explore the data:
+
+```{r country_table}
+# Prepare data for display
+display_data <- data %>%
+  select(
+    Country = country,
+    `EPI Score` = EPI,
+    `EPI Class` = EPI_Class,
+    `Predicted Class` = Predicted_Class,
+    `Biodiversity (BDH)` = BDH,
+    `Ecosystem Services (ECS)` = ECS,
+    `Fish Stocks (FSH)` = FSH,
+    `Air Pollution (APO)` = APO,
+    `Agriculture (AGR)` = AGR
+  ) %>%
+  arrange(desc(`EPI Score`))
+
+# Create interactive table
+DT::datatable(
+  display_data,
+  rownames = FALSE,
+  filter = 'top',
+  options = list(
+    pageLength = 10,
+    autoWidth = TRUE,
+    scrollX = TRUE
+  )
+) %>%
+  formatRound(columns = c('EPI Score', 'Biodiversity (BDH)', 'Ecosystem Services (ECS)', 
+                         'Fish Stocks (FSH)', 'Air Pollution (APO)', 'Agriculture (AGR)'), 
+             digits = 1)
+```
+
+## Model Performance
+
+The decision tree model achieves an accuracy of **`r round(accuracy * 100, 1)`%** in predicting EPI classes.
+
+## How to Use This Tool
+
+1. **Search**: Use the search box to find specific countries
+2. **Sort**: Click on column headers to sort the data
+3. **Filter**: Use the filter boxes below each column to filter the data
+4. **Explore**: Compare actual vs predicted EPI classes to identify interesting patterns

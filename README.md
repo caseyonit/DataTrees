@@ -1,33 +1,59 @@
-# Environmental Performance Index (EPI) Prediction Model
+# Environmental Performance Index (EPI) Analysis
 
-This project uses machine learning to predict a country's Environmental Performance Index (EPI) class (Low/Medium/High) based on key environmental indicators. The model helps identify which factors most significantly impact a country's overall environmental performance.
+This project provides an interactive analysis of the Environmental Performance Index (EPI) using decision tree modeling. It helps explore how different environmental indicators relate to a country's overall EPI score and classifies countries into performance categories (Low/Medium/High).
 
 ## Features
 
-- **Decision Tree Model**: Predicts EPI class using environmental indicators
-- **Interactive Analysis**: Includes code for training, evaluating, and visualizing the model
-- **Future Scenario Predictions**: Simulates how different environmental conditions affect EPI scores
-- **HTML Report**: Generates a detailed, self-contained report with visualizations
+- **Interactive Decision Tree**: Visual representation of how environmental indicators predict EPI classes
+- **Searchable Country Data**: Complete dataset with filtering and sorting capabilities
+- **Performance Metrics**: Model accuracy and prediction results
+- **Responsive Design**: Works well on different screen sizes
 
 ## Requirements
 
 - R (>= 4.0.0)
-- R packages: tidyverse, caret, rpart, rpart.plot
+- R packages: tidyverse, rpart, rpart.plot, DT
 - R Markdown (for report generation)
+
+## Installation
+
+1. Clone this repository
+2. Install required R packages:
+   ```R
+   install.packages(c("tidyverse", "rpart", "rpart.plot", "DT", "rmarkdown"))
+   ```
 
 ## Usage
 
-1. Clone this repository
-2. Install required R packages: `install.packages(c("tidyverse", "caret", "rpart", "rpart.plot", "rmarkdown"))`
-3. Run the analysis: `Rscript -e "rmarkdown::render('analysis_report.Rmd')"`
-4. Open `analysis_report.html` to view the results
+1. Run the analysis:
+   ```bash
+   Rscript -e "rmarkdown::render('analysis_report.Rmd')"
+   ```
+2. Open `analysis_report.html` in your web browser to view the interactive report
 
 ## Project Structure
 
-- `analysis_report.Rmd`: Main R Markdown file containing the analysis
-- `Data/epi2024_data.csv`: Input data file with environmental indicators
-- `analysis_output/`: Directory containing model outputs and logs
+- `analysis_report.Rmd`: Main analysis file with decision tree model and visualizations
+- `Data/epi2024_data.csv`: Dataset containing country-level environmental indicators and EPI scores
 - `biodiversity_analysis_clean.R`: Supporting R script with data processing functions
+- `LICENSE`: Apache 2.0 license file
+
+## How to Use the Interactive Report
+
+1. **Explore the Decision Tree**: Understand how environmental indicators predict EPI classes
+2. **Search and Filter**: Use the search box and column filters to find specific countries
+3. **Sort Data**: Click on column headers to sort the country data
+4. **Compare Predictions**: Examine actual vs. predicted EPI classes
+
+## Data Sources
+
+- EPI 2024 Dataset
+- Environmental indicators include:
+  - BDH: Biodiversity & Habitat
+  - ECS: Ecosystem Services
+  - FSH: Fish Stocks
+  - APO: Air Pollution
+  - AGR: Agriculture
 
 ## License
 
@@ -35,4 +61,4 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a Pull Request or open an issue for any suggestions or bug reports.

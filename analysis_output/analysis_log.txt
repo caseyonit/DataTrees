@@ -7537,3 +7537,151 @@ Something is wrong; all the Accuracy metric values are missing:
  3rd Qu.: NA   3rd Qu.: NA  
  Max.   : NA   Max.   : NA  
  NA's   :1     NA's   :1    
+
+=== Data Quality Assessment ===
+Missing values per column:
+         ECS          FSH Income.Group 
+          49           39            2 
+
+BDH Distribution:
+
+ 4.4  9.5 11.2   12 12.2 12.6 13.2 13.4 15.7 16.6   17 17.5 18.1 19.2 19.8   20 
+   1    1    1    1    1    1    1    1    1    1    1    1    1    1    1    2 
+  21   23 23.6 24.6 24.8 25.3 25.6 25.7 25.8 26.4 27.7   28 28.9 29.1 29.6 29.8 
+   1    1    1    1    1    1    1    1    1    1    1    1    1    1    1    1 
+  30 30.1 30.5 30.7 31.7 32.8 32.9   33 33.2 34.7   35 35.1 35.5   36 36.2 36.7 
+   2    1    1    1    2    2    1    1    1    1    1    1    1    1    1    1 
+  37 38.1 38.2 38.3 38.4 38.5 39.2 39.5 40.7 41.5 41.6 42.1 42.5 42.8 43.8   44 
+   1    1    1    1    1    1    2    1    1    1    1    1    1    2    1    1 
+44.4   45 45.2 45.3 45.4 45.8 45.9 46.4 47.1 47.3 47.4 47.5 47.6 48.6   49 49.5 
+   2    1    1    2    1    2    1    1    1    1    1    2    1    1    1    1 
+49.8 49.9 50.1 50.2 50.3 50.4 50.5 50.6   51 51.2 51.6 51.9   52 52.5 52.9   53 
+   1    1    1    1    1    1    2    1    1    1    1    1    1    1    1    1 
+53.1 53.3 53.4 53.7 53.8 54.2 54.8 55.2 55.5 56.2 56.5 56.6 56.9   57 57.1 57.8 
+   1    1    1    1    2    1    2    1    1    2    2    1    1    1    1    1 
+58.5   59 59.1 59.8   60 60.3 60.5   61 61.3 61.5 62.3 62.4 62.5 63.3 63.5 63.9 
+   1    1    2    2    1    1    1    1    1    1    1    1    1    1    1    1 
+  64 64.2 64.8 64.9 65.3 65.5 65.7 66.2 66.9 67.1 68.1 68.4 69.2 69.5 69.6 69.9 
+   1    1    1    1    1    1    1    1    2    1    1    1    1    1    1    1 
+70.2 70.4 71.5 71.6 71.9 73.3 74.3 74.9 78.8 78.9 81.4 81.9 82.4 83.7 84.8 85.6 
+   1    1    2    2    1    1    1    1    1    1    1    1    1    1    1    1 
+
+=== Feature Engineering ===
+Creating interaction terms with 5 valid features
+Created interaction term: EPI_x_APO
+Created interaction term: EPI_x_AGR
+Created interaction term: APO_x_AGR
+Creating polynomial features...
+Created polynomial feature: code_sq
+Created polynomial feature: EPI_sq
+Created polynomial feature: BDH_sq
+Created polynomial feature: APO_sq
+Created polynomial feature: AGR_sq
+Created polynomial feature: WRS_sq
+Created polynomial feature: AIR_sq
+Created polynomial feature: H2O_sq
+Created polynomial feature: HMT_sq
+Created polynomial feature: WMG_sq
+Created polynomial feature: CCH_sq
+Created polynomial feature: EPI_x_APO_sq
+Created polynomial feature: EPI_x_AGR_sq
+Created polynomial feature: APO_x_AGR_sq
+
+=== Data Splitting ===
+
+=== Feature Selection ===
+Removed 19 highly correlated features
+
+=== Model Training ===
+CatBoost package or caret method not available – skipping CatBoost model.
+
+=== Model Stacking ===
+
+=== Final Evaluation ===
+
+Final Model Accuracy: 69.44%
+
+=== Feature Importance ===
+ranger variable importance
+
+             Overall
+EPI_x_APO_sq 100.000
+EPI_x_APO     96.556
+EPI           75.333
+EPI_sq        69.194
+CCH           46.231
+AIR           44.314
+CCH_sq        39.917
+EPI_x_AGR_sq  23.287
+WMG_sq        16.260
+WRS           15.675
+AGR           15.158
+APO_x_AGR_sq  12.041
+APO_x_AGR      9.081
+code_sq        0.000
+
+=== Building Enhanced Regression Model (Random Forest) ===
+
+=== Building Enhanced Classification Model (XGBoost) ===
+
+=== Calculating Feature Importance ===
+
+Analysis complete! Open 'BDH_Analysis_Report.html' to view the results.
+
+=== Model Summaries ===
+
+=== Regression Model (Random Forest) ===
+Random Forest 
+
+144 samples
+ 11 predictor
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 128, 128, 130, 131, 131, 129, ... 
+Resampling results across tuning parameters:
+
+  mtry  RMSE      Rsquared   MAE      
+   2    13.43025  0.5143441  10.900740
+   4    12.73524  0.5571918  10.339154
+   6    12.32408  0.5799422  10.055179
+   8    11.99607  0.6018659   9.863576
+  11    11.62421  0.6245090   9.579198
+
+RMSE was used to select the optimal model using the smallest value.
+The final value used for the model was mtry = 11.
+
+
+=== Classification Model (XGBoost) ===
+eXtreme Gradient Boosting 
+
+144 samples
+ 11 predictor
+  3 classes: 'Low', 'Medium', 'High' 
+
+No pre-processing
+Resampling: Cross-Validated (10 fold) 
+Summary of sample sizes: 130, 131, 130, 129, 129, 130, ... 
+Resampling results:
+
+  Accuracy   Kappa    
+  0.6591575  0.4878625
+
+Tuning parameter 'nrounds' was held constant at a value of 100
+Tuning
+ held constant at a value of 1
+Tuning parameter 'subsample' was held
+ constant at a value of 0.8
+
+
+=== Final Model Performance ===
+
+Regression (Test Set):
+- R-squared: 0.684
+- RMSE: 10.14
+
+Classification (Test Set):
+- Accuracy: 61.11%
+- Precision (Weighted): 59.74%
+- Recall (Weighted): 62.53%
+- F1 Score (Weighted): 59.92%
