@@ -1,0 +1,53 @@
+BDH Clean Analysis – started at 2025-07-17 12:52:45 
+[[1]]
+[1] TRUE
+
+[[2]]
+[1] TRUE
+
+[[3]]
+[1] TRUE
+
+[[4]]
+[1] TRUE
+
+Data rows after NA removal: 105 
+Class distribution:
+
+   Low Medium   High 
+    35     35     35 
+
+Training Random-Forest (ranger)...
+Random Forest 
+
+84 samples
+ 6 predictor
+ 3 classes: 'Low', 'Medium', 'High' 
+
+No pre-processing
+Resampling: Cross-Validated (5 fold) 
+Summary of sample sizes: 67, 66, 68, 69, 66 
+Resampling results:
+
+  logLoss    AUC        prAUC      Accuracy   Kappa      Mean_F1  
+  0.1764006  0.9981481  0.8165608  0.9888889  0.9833333  0.9888112
+  Mean_Sensitivity  Mean_Specificity  Mean_Pos_Pred_Value  Mean_Neg_Pred_Value
+  0.9888889         0.9944444         0.9904762            0.9948718          
+  Mean_Precision  Mean_Recall  Mean_Detection_Rate  Mean_Balanced_Accuracy
+  0.9904762       0.9888889    0.3296296            0.9916667             
+
+Tuning parameter 'mtry' was held constant at a value of 3
+Tuning
+ parameter 'splitrule' was held constant at a value of gini
+Tuning
+ parameter 'min.node.size' was held constant at a value of 1
+
+Confusion matrix:
+          Reference
+Prediction Low Medium High
+    Low      7      0    0
+    Medium   0      7    1
+    High     0      0    6
+
+Overall Accuracy: 95.24 %
+Model saved to analysis_output/rf_bdh_model.rds 

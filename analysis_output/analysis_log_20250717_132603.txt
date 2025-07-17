@@ -1,0 +1,23 @@
+BDH Clean Analysis – started at 2025-07-17 13:26:03 
+[[1]]
+[1] TRUE
+
+[[2]]
+[1] TRUE
+
+[[3]]
+[1] TRUE
+
+[[4]]
+[1] TRUE
+
+[[5]]
+[1] TRUE
+
+Data rows after NA removal: 105 
+Class distribution:
+
+   Low Medium   High 
+    35     35     35 
+
+Training Decision Tree (rpart)...

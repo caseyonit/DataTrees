@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+      <title>BDH Analysis Report</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .metrics { 
+          background-color: #f8f9fa; 
+          padding: 20px; 
+          border-radius: 5px; 
+          margin: 20px 0; 
+        }
+        .plot-image {
+          max-width: 100%;
+          height: auto;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          margin: 10px 0;
+        }
+        .row {
+          display: flex;
+          flex-wrap: wrap;
+          margin: 0 -10px;
+        }
+        .column {
+          flex: 50%;
+          padding: 0 10px;
+          box-sizing: border-box;
+        }
+        @media (max-width: 768px) {
+          .column { flex: 100%; }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>Biodiversity & Habitat (BDH) Analysis</h1>
+        <p>Analysis completed on: 2025-07-17 11:50:30</p>
+        
+        <div class="metrics">
+          <h2>Regression Model (Random Forest)</h2>
+          <p><strong>R-squared:</strong> 0.692 (Higher is better, max 1.0)</p>
+          <p><strong>RMSE:</strong> 10.006 (Lower is better)</p>
+          <img src="plots/regression_performance.png" alt="Regression Performance" class="plot-image">
+          <h2>Classification Model (XGBoost)</h2>
+          <p><strong>Accuracy:</strong> 63.9%</p>
+          <p><strong>Precision (Weighted):</strong> 65.7%</p>
+          <p><strong>Recall (Weighted):</strong> 62%</p>
+          <p><strong>F1 Score (Weighted):</strong> 63%</p>
+          <h3>Feature Importance</h3>
+          <div class="row">
+            <div class="column">
+              <h4>Regression</h4>
+              <img src="plots/feature_importance_regression.png" alt="Feature Importance (Regression)" class="plot-image">
+            </div>
+            <div class="column">
+              <h4>Classification</h4>
+              <img src="plots/feature_importance_classification.png" alt="Feature Importance (Classification)" class="plot-image">
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+    </html>

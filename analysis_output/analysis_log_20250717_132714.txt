@@ -1,0 +1,96 @@
+BDH Clean Analysis – started at 2025-07-17 13:27:14 
+[[1]]
+[1] TRUE
+
+[[2]]
+[1] TRUE
+
+[[3]]
+[1] TRUE
+
+[[4]]
+[1] TRUE
+
+[[5]]
+[1] TRUE
+
+Data rows after NA removal: 105 
+Class distribution:
+
+   Low Medium   High 
+    35     35     35 
+
+Training Decision Tree (rpart)...
+CART 
+
+84 samples
+ 6 predictor
+ 3 classes: 'Low', 'Medium', 'High' 
+
+No pre-processing
+Resampling: Cross-Validated (5 fold, repeated 3 times) 
+Summary of sample sizes: 67, 66, 68, 69, 66, 67, ... 
+Resampling results across tuning parameters:
+
+  cp          logLoss    AUC        prAUC        Accuracy   Kappa    
+  0.00000000  0.6951023  0.9844613  0.013724582  0.9798747  0.9695687
+  0.05555556  0.6951023  0.9844613  0.013724582  0.9798747  0.9695687
+  0.11111111  0.6951023  0.9844613  0.013724582  0.9798747  0.9695687
+  0.16666667  0.6951023  0.9844613  0.013724582  0.9798747  0.9695687
+  0.22222222  0.6951023  0.9844613  0.013724582  0.9798747  0.9695687
+  0.27777778  0.6951023  0.9844613  0.013724582  0.9798747  0.9695687
+  0.33333333  0.6951023  0.9844613  0.013724582  0.9798747  0.9695687
+  0.38888889  0.6951023  0.9844613  0.013724582  0.9798747  0.9695687
+  0.44444444  0.6951023  0.9844613  0.013724582  0.9798747  0.9695687
+  0.50000000  1.0779697  0.5825253  0.002916667  0.3886438  0.1151515
+  Mean_F1    Mean_Sensitivity  Mean_Specificity  Mean_Pos_Pred_Value
+  0.9793213  0.9792593         0.9896633         0.9843915          
+  0.9793213  0.9792593         0.9896633         0.9843915          
+  0.9793213  0.9792593         0.9896633         0.9843915          
+  0.9793213  0.9792593         0.9896633         0.9843915          
+  0.9793213  0.9792593         0.9896633         0.9843915          
+  0.9793213  0.9792593         0.9896633         0.9843915          
+  0.9793213  0.9792593         0.9896633         0.9843915          
+  0.9793213  0.9792593         0.9896633         0.9843915          
+  0.9793213  0.9792593         0.9896633         0.9843915          
+        NaN  0.4177778         0.7050505               NaN          
+  Mean_Neg_Pred_Value  Mean_Precision  Mean_Recall  Mean_Detection_Rate
+  0.9911681            0.9843915       0.9792593    0.3266249          
+  0.9911681            0.9843915       0.9792593    0.3266249          
+  0.9911681            0.9843915       0.9792593    0.3266249          
+  0.9911681            0.9843915       0.9792593    0.3266249          
+  0.9911681            0.9843915       0.9792593    0.3266249          
+  0.9911681            0.9843915       0.9792593    0.3266249          
+  0.9911681            0.9843915       0.9792593    0.3266249          
+  0.9911681            0.9843915       0.9792593    0.3266249          
+  0.9911681            0.9843915       0.9792593    0.3266249          
+  0.8680556                  NaN       0.4177778    0.1295479          
+  Mean_Balanced_Accuracy
+  0.9844613             
+  0.9844613             
+  0.9844613             
+  0.9844613             
+  0.9844613             
+  0.9844613             
+  0.9844613             
+  0.9844613             
+  0.9844613             
+  0.5614141             
+
+Accuracy was used to select the optimal model using the largest value.
+The final value used for the model was cp = 0.4444444.
+
+Confusion matrix:
+          Reference
+Prediction Low Medium High
+    Low      7      0    0
+    Medium   0      7    1
+    High     0      0    6
+
+Overall Accuracy: 95.24 %
+
+Plotting decision tree...
+null device 
+          1 
+Decision tree plot saved to analysis_output/decision_tree_plot.png 
+Model saved to analysis_output/dt_bdh_model.rds 
